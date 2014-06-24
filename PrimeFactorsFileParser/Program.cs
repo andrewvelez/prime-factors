@@ -10,7 +10,7 @@ namespace PrimeFactorsFileParser
     {
         public static void Main(string[] args)
         {
-            if (args == null || string.IsNullOrWhiteSpace(args[0]))
+            if (args == null || args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
             {
                 Console.WriteLine("Program must be called with a valid file path as the first argument");
                 return;
