@@ -16,14 +16,16 @@ namespace PrimeFactorsFileParser
             PrimesParser parser = new PrimesParser();
             parser.LoadFile(Path.GetFullPath(args[0]));
 
-            if (!string.IsNullOrWhiteSpace(parser.ErrorMessage))
+            if (string.IsNullOrWhiteSpace(parser.ErrorMessage))
+            {
+                Console.WriteLine(parser.GetPrimesOutput());
+            }
+            else
             {
                 Console.WriteLine(parser.ErrorMessage);
                 return;
             }
 
-            Console.WriteLine(parser.GetPrimesOutput());
-            Console.ReadLine();
         }
     }
 }

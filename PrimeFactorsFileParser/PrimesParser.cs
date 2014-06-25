@@ -10,22 +10,10 @@ namespace PrimeFactorsFileParser
         
         public string ErrorMessage { get; private set; }
         private List<int> _InputIntegers;
-        private List<bool> _PartialPrimeSieve;
-        private Dictionary<int, bool> _Primes;
 
         public PrimesParser()
         {
             _InputIntegers = new List<int>();
-            _PartialPrimeSieve = new List<bool>();
-            _PartialPrimeSieve[0] = false;
-            _PartialPrimeSieve[1] = false;
-            _PartialPrimeSieve[2] = true;
-            _PartialPrimeSieve[3] = true;
-            _Primes = new Dictionary<int, bool>();
-            _Primes.Add(0, false);
-            _Primes.Add(1, false);
-            _Primes.Add(2, true);
-            _Primes.Add(3, true);
         }
 
         public void LoadFile(string filePath)
@@ -95,34 +83,35 @@ namespace PrimeFactorsFileParser
 
         private string GetCsvPrimes(int number)
         {
-            string result = "";
-
-            for (int i = 1; i <= number; i++)
+            if (number == 1)
             {
-                if (number % i == 0)
+                return "1";
+            }
+            
+            StringBuilder result = new StringBuilder();
+            var primes = new SieveOfAtkin((ulong)(System.Math.Sqrt(number) + 1));
+
+            foreach (int p in primes)
+            {
+                if (p * p > number)
+                    break;
+
+                while (number % p == 0)
                 {
-                    result += i.ToString() + ",";
+                    result.Append(p.ToString());
+                    result.Append(",");
+                    number /= p;
                 }
             }
 
-            result = result.Trim(',');
-            return result;
-        }
+            if (number > 1)
+            {
+                result.Append(number.ToString());
+                result.Append(",");
+            }
 
-        private bool IsPrime(int number)
-        {
-            if (number < 2)
-            {
-                return false;
-            }
-            else if (_Primes.ContainsKey(number))
-            {
-                return _Primes[number];
-            }
-            else
-            {
-                return false;
-            }
+            string csv = result.ToString();
+            return csv.Trim(',');
         }
 
     }
