@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace PrimeFactorsFileParser
 {
@@ -17,7 +14,7 @@ namespace PrimeFactorsFileParser
             }
 
             PrimesParser parser = new PrimesParser();
-            parser.LoadFile(args[0]);
+            parser.LoadFile(Path.GetFullPath(args[0]));
 
             if (!string.IsNullOrWhiteSpace(parser.ErrorMessage))
             {

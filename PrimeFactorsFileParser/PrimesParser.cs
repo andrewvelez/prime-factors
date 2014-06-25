@@ -1,21 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PrimeFactorsFileParser
 {
     internal class PrimesParser
     {
-
-        private List<int> _InputIntegers;
+        
         public string ErrorMessage { get; private set; }
+        private List<int> _InputIntegers;
+        private List<bool> _PartialPrimeSieve;
+        private Dictionary<int, bool> _Primes;
+
+        public PrimesParser()
+        {
+            _InputIntegers = new List<int>();
+            _PartialPrimeSieve = new List<bool>();
+            _PartialPrimeSieve[0] = false;
+            _PartialPrimeSieve[1] = false;
+            _PartialPrimeSieve[2] = true;
+            _PartialPrimeSieve[3] = true;
+            _Primes = new Dictionary<int, bool>();
+            _Primes.Add(0, false);
+            _Primes.Add(1, false);
+            _Primes.Add(2, true);
+            _Primes.Add(3, true);
+        }
 
         public void LoadFile(string filePath)
         {
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
             {
                 LoadFileValidPath(filePath);
             }
@@ -44,6 +59,11 @@ namespace PrimeFactorsFileParser
             int tempInt;
             foreach (string s in inputList)
             {
+                if (string.IsNullOrWhiteSpace(s))
+                {
+                    continue;
+                }
+
                 if (int.TryParse(s, out tempInt))
                 {
                     _InputIntegers.Add(tempInt);
@@ -87,6 +107,22 @@ namespace PrimeFactorsFileParser
 
             result = result.Trim(',');
             return result;
+        }
+
+        private bool IsPrime(int number)
+        {
+            if (number < 2)
+            {
+                return false;
+            }
+            else if (_Primes.ContainsKey(number))
+            {
+                return _Primes[number];
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
